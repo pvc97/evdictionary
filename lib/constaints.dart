@@ -9,3 +9,6 @@ const kTextColor = Color(0xFF3C4046);
 const kBackgroundColor = Color(0xFFF4F4FF);
 
 const double kDefaultPadding = 30.0;
+
+const kVietNamFlagDir = 'assets/icons/vietnamese.png';
+const kEnglishFlagDir = 'assets/icons/english.png';

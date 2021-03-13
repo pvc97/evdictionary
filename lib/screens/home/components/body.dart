@@ -2,6 +2,7 @@ import 'package:ev_dictionary/constaints.dart';
 import 'package:flutter/material.dart';
 import 'switch_button.dart';
 import 'flag_widget.dart';
+import 'package:ev_dictionary/screens/definition/definition_screen.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   Translate translateType = Translate.av;
+
+  final items = List<String>.generate(10000, (i) => "Item $i");
 
   void changeTranslateType() {
     setState(() {
@@ -37,6 +40,20 @@ class _BodyState extends State<Body> {
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
+                  ),
+                  gradient: LinearGradient(
+                    stops: [0.2, 0.8, 1],
+                    colors: [
+                      Colors.red[800],
+                      Colors.lightBlue,
+                      Colors.blue[800],
+                    ],
+                    begin: translateType == Translate.va
+                        ? Alignment.topLeft
+                        : Alignment.bottomRight,
+                    end: translateType == Translate.av
+                        ? Alignment.topLeft
+                        : Alignment.bottomRight,
                   ),
                 ),
               ),
@@ -109,10 +126,18 @@ class _BodyState extends State<Body> {
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: 50.0),
-            itemBuilder: (context, position) {
+            itemCount: items.length,
+            itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  print('wow');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DefinitionScreen(
+                        word: items[index],
+                      ),
+                    ),
+                  );
                 },
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
@@ -125,11 +150,25 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ),
-                  child: Text(
-                    position.toString(),
-                    style: TextStyle(
-                      fontSize: 25.0,
-                    ),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        translateType == Translate.av
+                            ? kEnglishFlagDir
+                            : kVietNamFlagDir,
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: 20.0,
+                      ),
+                      Text(
+                        '${items[index]}',
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
