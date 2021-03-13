@@ -1,6 +1,6 @@
+import 'package:ev_dictionary/navigation.dart';
 import 'package:flutter/material.dart';
 import 'constaints.dart';
-import 'screens/home/search_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SearchScreen(),
+      home: Navigation(),
     );
   }
 }

@@ -1,15 +1,15 @@
 import 'package:ev_dictionary/constaints.dart';
 import 'package:flutter/material.dart';
-import 'switch_button.dart';
-import 'flag_widget.dart';
+import 'components/switch_button.dart';
+import 'components/flag_widget.dart';
 import 'package:ev_dictionary/screens/definition/definition_screen.dart';
 
-class Body extends StatefulWidget {
+class OfflineSearchScreen extends StatefulWidget {
   @override
-  _BodyState createState() => _BodyState();
+  _OfflineSearchScreenState createState() => _OfflineSearchScreenState();
 }
 
-class _BodyState extends State<Body> {
+class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
   Translate translateType = Translate.av;
 
   final items = List<String>.generate(10000, (i) => "Item $i");
