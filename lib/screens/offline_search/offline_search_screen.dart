@@ -1,8 +1,11 @@
-import 'package:ev_dictionary/constaints.dart';
+import 'package:ev_dictionary/utilities/constaints.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'components/switch_button.dart';
 import 'components/flag_widget.dart';
 import 'package:ev_dictionary/screens/definition/definition_screen.dart';
+import 'package:ev_dictionary/utilities/database_helper.dart';
+import 'package:ev_dictionary/utilities/word.dart';
 
 class OfflineSearchScreen extends StatefulWidget {
   @override
@@ -10,9 +13,30 @@ class OfflineSearchScreen extends StatefulWidget {
 }
 
 class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
+  final DatabaseHelper databaseHelper = DatabaseHelper.instance;
+
   Translate translateType = Translate.av;
 
-  final items = List<String>.generate(10000, (i) => "Item $i");
+  List<Word> items = [];
+
+  Future<List> _getListWords(String word) async {
+    Database db = await databaseHelper.database;
+    List<Map> result = await db
+        .rawQuery('SELECT * from av where word LIKE? LIMIT 50', ['$word%']);
+
+    List<Word> words = List.generate(
+      result.length,
+      (i) => Word(
+          id: result[i]['id'],
+          word: result[i]['word'],
+          html: result[i]['html'],
+          description: result[i]['description'],
+          pronounce: result[i]['pronounce']),
+    );
+    words
+        .sort((a, b) => (a.word.toLowerCase()).compareTo(b.word.toLowerCase()));
+    return words;
+  }
 
   void changeTranslateType() {
     setState(() {
@@ -22,6 +46,21 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
         translateType = Translate.av;
       }
     });
+  }
+
+  Future updateListWord(String value) async {
+    items = await _getListWords(value);
+  }
+
+  void loadInitWords() async {
+    await updateListWord('');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadInitWords();
   }
 
   @override
@@ -110,11 +149,25 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                       ),
                     ),
                     textInputAction: TextInputAction.search,
-                    onSubmitted: (value) {
-                      print(value);
+                    onSubmitted: (value) async {
+                      if (items.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DefinitionScreen(
+                              word: items[0],
+                            ),
+                          ),
+                        );
+                      } else {
+                        await updateListWord(
+                            value.substring(0, value.length - 1));
+                        setState(() {});
+                      }
                     },
-                    onChanged: (value) {
-                      print(value);
+                    onChanged: (value) async {
+                      await updateListWord(value);
+                      setState(() {});
                     },
                   ),
                 ),
@@ -163,7 +216,9 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                         width: 20.0,
                       ),
                       Text(
-                        '${items[index]}',
+                        items[index].word.length > 17
+                            ? '${items[index].word.substring(0, 17)}...'
+                            : '${items[index].word}',
                         style: TextStyle(
                           fontSize: 25.0,
                         ),

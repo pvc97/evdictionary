@@ -2,7 +2,7 @@ import 'package:ev_dictionary/screens/favorite/favorite_screen.dart';
 import 'package:ev_dictionary/screens/offline_search/offline_search_screen.dart';
 import 'package:ev_dictionary/screens/online/online_search_screen.dart';
 import 'package:flutter/material.dart';
-import 'constaints.dart';
+import 'utilities/constaints.dart';
 import 'screens/offline_search/offline_search_screen.dart';
 import 'screens/history/history_screen.dart';
 
@@ -56,12 +56,12 @@ class _NavigationState extends State<Navigation> {
                 backgroundColor: kBackgroundColor,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.history),
+                icon: Icon(Icons.access_time),
                 label: 'History',
                 backgroundColor: kBackgroundColor,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.star),
+                icon: Icon(Icons.star_border),
                 label: 'Favorite',
                 backgroundColor: kBackgroundColor,
               ),
