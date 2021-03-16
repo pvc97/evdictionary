@@ -21,8 +21,16 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
 
   Future<List> _getListWords(String word) async {
     Database db = await databaseHelper.database;
-    List<Map> result = await db
-        .rawQuery('SELECT * from av where word LIKE? LIMIT 50', ['$word%']);
+
+    String tableName;
+    if (translateType == Translate.av) {
+      tableName = 'av';
+    } else {
+      tableName = 'va';
+    }
+
+    List<Map> result = await db.rawQuery(
+        'SELECT * from $tableName where word LIKE ? LIMIT 50', ['$word%']);
 
     List<Word> words = List.generate(
       result.length,
@@ -46,6 +54,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
         translateType = Translate.av;
       }
     });
+    loadInitWords();
   }
 
   Future updateListWord(String value) async {
@@ -73,19 +82,19 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
           child: Stack(
             children: [
               Container(
-                height: size.height * 0.2 - 22,
+                height: size.height * 0.2 - 26,
                 decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
                   ),
                   gradient: LinearGradient(
                     stops: [0.2, 0.8, 1],
                     colors: [
-                      Colors.red[800],
+                      kVietnameseAppbarColor,
                       Colors.lightBlue,
-                      Colors.blue[800],
+                      kEnglishAppbarColor,
                     ],
                     begin: translateType == Translate.va
                         ? Alignment.topLeft
@@ -156,6 +165,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                           MaterialPageRoute(
                             builder: (context) => DefinitionScreen(
                               word: items[0],
+                              translateType: translateType,
                             ),
                           ),
                         );
@@ -178,7 +188,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
         Expanded(
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
             itemCount: items.length,
             itemBuilder: (context, index) {
               return InkWell(
@@ -188,6 +198,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                     MaterialPageRoute(
                       builder: (context) => DefinitionScreen(
                         word: items[index],
+                        translateType: translateType,
                       ),
                     ),
                   );
@@ -216,9 +227,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                         width: 20.0,
                       ),
                       Text(
-                        items[index].word.length > 17
-                            ? '${items[index].word.substring(0, 17)}...'
-                            : '${items[index].word}',
+                        '${items[index].word}',
                         style: TextStyle(
                           fontSize: 25.0,
                         ),

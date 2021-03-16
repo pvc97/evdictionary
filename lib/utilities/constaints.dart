@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 // va: Vietnamese to English
 enum Translate { av, va }
 
-const kPrimaryColor = Color(0xFF28185C);
+const kPrimaryColor = Colors.blue;
 const kTextColor = Color(0xFF3C4046);
 const kBackgroundColor = Color(0xFFF4F4FF);
-
+const kVietnameseAppbarColor = Color(0xFFC62828);
+const kEnglishAppbarColor = Color(0xFF1565C0);
 const double kDefaultPadding = 30.0;
 
 const kVietNamFlagDir = 'assets/icons/vietnamese.png';
