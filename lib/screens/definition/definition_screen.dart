@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ev_dictionary/utilities/word.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
+import 'package:flutter_html/style.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class DefinitionScreen extends StatelessWidget {
@@ -36,7 +37,8 @@ class DefinitionScreen extends StatelessWidget {
         title: Text(
           word.word,
           style: TextStyle(
-            fontSize: 30.0,
+            fontSize: 35.0,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
@@ -47,7 +49,7 @@ class DefinitionScreen extends StatelessWidget {
             // Using RawMaterialButton because IconButton don't have background color
             child: RawMaterialButton(
               child: Icon(
-                Icons.star_border,
+                Icons.star_border_rounded,
                 color: translateType == Translate.av
                     ? kEnglishAppbarColor
                     : kVietnameseAppbarColor,
@@ -78,21 +80,36 @@ class DefinitionScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               color: kBackgroundColor,
             ),
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             margin: EdgeInsets.all(20.0),
             child: SingleChildScrollView(
-              child: Html(
-                data: word.html,
+              // Because Html Widget causes lagging when naviagate from
+              // search screen with long html input
+              // So I used FutureBuilder and _buildHtml with some delay to make
+              // animation smoother
+              child: FutureBuilder(
+                future: _buildHtml(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data;
+                  }
+
+                  return Container(
+                    height: size.height * 0.8,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
               ),
             ),
           ),
           Positioned(
-            top: 30,
-            right: 10,
+            top: 25.0,
+            right: 10.0,
             child: RawMaterialButton(
               onPressed: () {
                 _speak();
-                print('??');
               },
               elevation: 1.0,
               fillColor: Colors.white,
@@ -105,6 +122,29 @@ class DefinitionScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<Widget> _buildHtml() async {
+    if (word.html.length > 5000) {
+      await Future<String>.delayed(const Duration(milliseconds: 400));
+    }
+
+    return Html(
+      data: word.html,
+      style: {
+        'h1': Style(
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+          margin: EdgeInsets.zero,
+        ),
+        'h3': Style(
+          color: Colors.red,
+        ),
+        'h2': Style(
+          color: Colors.blue[800],
+        ),
+      },
     );
   }
 }

@@ -6,6 +6,7 @@ import 'components/flag_widget.dart';
 import 'package:ev_dictionary/screens/definition/definition_screen.dart';
 import 'package:ev_dictionary/utilities/database_helper.dart';
 import 'package:ev_dictionary/utilities/word.dart';
+import 'package:flutter/cupertino.dart';
 
 class OfflineSearchScreen extends StatefulWidget {
   @override
@@ -47,18 +48,18 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
   }
 
   void changeTranslateType() {
-    setState(() {
-      if (translateType == Translate.av) {
-        translateType = Translate.va;
-      } else {
-        translateType = Translate.av;
-      }
-    });
+    if (translateType == Translate.av) {
+      translateType = Translate.va;
+    } else {
+      translateType = Translate.av;
+    }
+
     loadInitWords();
   }
 
   Future updateListWord(String value) async {
     items = await _getListWords(value);
+    setState(() {});
   }
 
   void loadInitWords() async {
@@ -139,6 +140,11 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                          color: kPrimaryColor.withOpacity(0.2),
+                          blurRadius: 10),
+                    ],
                   ),
                   child: TextField(
                     style: TextStyle(
@@ -162,7 +168,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                       if (items.isNotEmpty) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (context) => DefinitionScreen(
                               word: items[0],
                               translateType: translateType,
@@ -170,14 +176,11 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                           ),
                         );
                       } else {
-                        await updateListWord(
-                            value.substring(0, value.length - 1));
-                        setState(() {});
+                        await updateListWord(value);
                       }
                     },
                     onChanged: (value) async {
                       await updateListWord(value);
-                      setState(() {});
                     },
                   ),
                 ),
@@ -195,7 +198,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    CupertinoPageRoute(
                       builder: (context) => DefinitionScreen(
                         word: items[index],
                         translateType: translateType,

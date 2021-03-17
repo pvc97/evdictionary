@@ -40,7 +40,10 @@ class _NavigationState extends State<Navigation> {
             topLeft: Radius.circular(30),
           ),
           boxShadow: [
-            BoxShadow(color: kPrimaryColor.withOpacity(0.2), blurRadius: 35),
+            BoxShadow(
+              color: kPrimaryColor.withOpacity(0.2),
+              blurRadius: 10,
+            ),
           ],
         ),
         child: ClipRRect(
@@ -61,7 +64,7 @@ class _NavigationState extends State<Navigation> {
                 backgroundColor: kBackgroundColor,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.star_border),
+                icon: Icon(Icons.star_border_rounded),
                 label: 'Favorite',
                 backgroundColor: kBackgroundColor,
               ),
