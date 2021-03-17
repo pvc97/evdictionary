@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'components/shared_appbar.dart';
 
 class DefinitionScreen extends StatelessWidget {
   final Word word;
@@ -13,7 +14,6 @@ class DefinitionScreen extends StatelessWidget {
   DefinitionScreen({@required this.word, this.translateType});
 
   Future _speak() async {
-    print(translateType);
     if (translateType == Translate.av) {
       await flutterTts.setLanguage('en-US');
     } else if (translateType == Translate.va) {
@@ -29,48 +29,21 @@ class DefinitionScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: translateType == Translate.av
-            ? kEnglishAppbarColor
-            : kVietnameseAppbarColor,
-        toolbarHeight: size.height * 0.1,
-        title: Text(
-          word.word,
-          style: TextStyle(
-            fontSize: 35.0,
-            fontWeight: FontWeight.bold,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.1),
+        child: SharedAppBar(
+          size: size,
+          title: word.word,
+          backgroundColor: translateType == Translate.av
+              ? kEnglishAppbarColor
+              : kVietnameseAppbarColor,
+          icon: Icon(
+            Icons.star_border_rounded,
+            color: translateType == Translate.av
+                ? kEnglishAppbarColor
+                : kVietnameseAppbarColor,
           ),
-        ),
-        actions: [
-          Container(
-            margin: EdgeInsets.only(
-              right: 10.0,
-            ),
-            // Using RawMaterialButton because IconButton don't have background color
-            child: RawMaterialButton(
-              child: Icon(
-                Icons.star_border_rounded,
-                color: translateType == Translate.av
-                    ? kEnglishAppbarColor
-                    : kVietnameseAppbarColor,
-              ),
-              onPressed: () {},
-              elevation: 0.0,
-              constraints: BoxConstraints.tightFor(
-                width: 40.0,
-                height: 40.0,
-              ),
-              shape: CircleBorder(), // Button Tròn
-              fillColor: Colors.white,
-            ),
-          ),
-        ],
-        centerTitle: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(25),
-            bottomRight: Radius.circular(25),
-          ),
+          onPressed: () {},
         ),
       ),
       body: Stack(
@@ -126,8 +99,8 @@ class DefinitionScreen extends StatelessWidget {
   }
 
   Future<Widget> _buildHtml() async {
-    if (word.html.length > 5000) {
-      await Future<String>.delayed(const Duration(milliseconds: 400));
+    if (word.html.length > 2000) {
+      await Future.delayed(const Duration(milliseconds: 400));
     }
 
     return Html(

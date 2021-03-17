@@ -47,6 +47,24 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
     return words;
   }
 
+  // Insert to history table with 2 field are id and table
+  void _insertToHistory(Word word) async {
+    Database db = await databaseHelper.database;
+    String tb;
+    if (translateType == Translate.av) {
+      tb = 'av';
+    } else {
+      tb = 'va';
+    }
+
+    // Colum tb khong co primary key nen chen vao thoa mai
+
+    // Khong can chen gia tri vao column position vi no la primary key
+    // nen se tu tang len 1 moi khi insert
+    db.rawQuery(
+        '''INSERT INTO history (id, word, tb) VALUES (${word.id}, '${word.word}', '$tb')''');
+  }
+
   void changeTranslateType() {
     if (translateType == Translate.av) {
       translateType = Translate.va;
@@ -142,8 +160,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                          color: kPrimaryColor.withOpacity(0.2),
-                          blurRadius: 10),
+                          color: Colors.grey.withOpacity(0.2), blurRadius: 10),
                     ],
                   ),
                   child: TextField(
@@ -151,7 +168,6 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                       fontSize: 22.0,
                     ),
                     decoration: InputDecoration(
-                      // contentPadding: EdgeInsets.only(right: 20.0),
                       hintText: 'Search',
                       hintStyle: TextStyle(
                         color: Colors.grey,
@@ -164,23 +180,22 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                       ),
                     ),
                     textInputAction: TextInputAction.search,
-                    onSubmitted: (value) async {
+                    onSubmitted: (value) {
                       if (items.isNotEmpty) {
+                        _insertToHistory(items.first);
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
                             builder: (context) => DefinitionScreen(
-                              word: items[0],
+                              word: items.first,
                               translateType: translateType,
                             ),
                           ),
                         );
-                      } else {
-                        await updateListWord(value);
                       }
                     },
-                    onChanged: (value) async {
-                      await updateListWord(value);
+                    onChanged: (value) {
+                      updateListWord(value);
                     },
                   ),
                 ),
@@ -189,6 +204,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
           ),
         ),
         Expanded(
+          // ListView in column need wrap by Expanded
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -196,6 +212,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
+                  _insertToHistory(items[index]);
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
@@ -241,7 +258,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

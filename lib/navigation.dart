@@ -1,6 +1,6 @@
 import 'package:ev_dictionary/screens/favorite/favorite_screen.dart';
 import 'package:ev_dictionary/screens/offline_search/offline_search_screen.dart';
-import 'package:ev_dictionary/screens/online/online_search_screen.dart';
+import 'package:ev_dictionary/screens/online_search/online_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'utilities/constaints.dart';
 import 'screens/offline_search/offline_search_screen.dart';
@@ -41,7 +41,7 @@ class _NavigationState extends State<Navigation> {
           ),
           boxShadow: [
             BoxShadow(
-              color: kPrimaryColor.withOpacity(0.2),
+              color: Colors.grey.withOpacity(0.2),
               blurRadius: 10,
             ),
           ],
