@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ev_dictionary/utilities/database_helper.dart';
+import 'components/favorite.dart';
 
 class FavoriteScreen extends StatefulWidget {
   @override
@@ -14,29 +15,25 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  List<Word> items = [];
+  List<Favorite> items = [];
 
   Future<List> _getListFavorite() async {
     Database db = await DatabaseHelper.instance.database;
 
-    List<Map> result = await db.rawQuery(
-        'SELECT * FROM av WHERE favorite = 1 UNION SELECT * FROM va WHERE favorite = 2');
+    List<Map> result = await db.rawQuery('SELECT * FROM favorite');
 
-    List<Word> words = List.generate(
+    List<Favorite> favorites = List.generate(
       result.length,
-      (i) => Word(
+      (i) => Favorite(
         id: result[i]['id'],
         word: result[i]['word'],
-        html: result[i]['html'],
-        description: result[i]['description'],
-        pronounce: result[i]['pronounce'],
-        favorite: result[i]['favorite'],
+        table: result[i]['tb'],
       ),
     );
-    words
+    favorites
         .sort((a, b) => (a.word.toLowerCase()).compareTo(b.word.toLowerCase()));
 
-    return words;
+    return favorites;
   }
 
   void _loadFavorite() async {
@@ -44,16 +41,51 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     setState(() {});
   }
 
-  void _removeFavorite(Word item) async {
+  void _removeFavorite(Favorite item) async {
     Database db = await DatabaseHelper.instance.database;
-    String tableName;
 
-    if (item.favorite == 1) {
+    db.rawQuery('DELETE FROM favorite WHERE id = ${item.id}');
+  }
+
+  Future _onPressedWordCard(List items, int index) async {
+    Database db = await DatabaseHelper.instance.database;
+
+    String tableName;
+    Translate translateType;
+    if (items[index].table == 'av') {
       tableName = 'av';
+      translateType = Translate.av;
     } else {
       tableName = 'va';
+      translateType = Translate.va;
     }
-    db.rawQuery('UPDATE $tableName SET favorite = 0 WHERE id = ${item.id}');
+    List<Map> result = await db.rawQuery(
+        'SELECT * FROM $tableName WHERE $tableName.id = ${items[index].id}');
+
+    List<Word> word = List.generate(
+      result.length,
+      (i) => Word(
+        id: result[i]['id'],
+        word: result[i]['word'],
+        html: result[i]['html'],
+        description: result[i]['description'],
+        pronounce: result[i]['pronounce'],
+      ),
+    );
+
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => DefinitionScreen(
+          word: word.first,
+          translateType: translateType,
+        ),
+      ),
+    ).then((value) {
+      // Thêm dòng này để khi bỏ favorite ở trang definition
+      // Thì sẽ rebuild lại để hiển thị cho đúng thực tế
+      _loadFavorite();
+    });
   }
 
   @override
@@ -83,7 +115,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           itemBuilder: (context, index) {
             final item = items[index];
             return Dismissible(
-              key: Key(item.id.toString() + '+' + item.favorite.toString()),
+              key: Key(item.id.toString()),
               onDismissed: (direction) {
                 setState(() {
                   items.removeAt(index);
@@ -93,27 +125,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: WordCard(
                 items: items,
                 index: index,
-                flagDir: items[index].favorite == 1
+                flagDir: items[index].table == 'av'
                     ? kEnglishFlagDir
                     : kVietNamFlagDir,
                 // Because onPressedWordCard is Future function,
                 // I can not pass it in to a Function variable
                 // so wrap it with another Function :)
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => DefinitionScreen(
-                        word: items[index],
-                        translateType: items[index].favorite == 1
-                            ? Translate.av
-                            : Translate.va,
-                      ),
-                    ),
-                  ).then((value) {
-                    // Thêm dòng này để khi bỏ favorite ở trang definition
-                    _loadFavorite(); // Thì sẽ rebuild lại để hiển thị cho đúng thực tế
-                  });
+                  _onPressedWordCard(items, index);
                 },
               ),
             );

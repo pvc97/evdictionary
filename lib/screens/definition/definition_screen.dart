@@ -21,6 +21,28 @@ class DefinitionScreen extends StatefulWidget {
 
 class _DefinitionScreenState extends State<DefinitionScreen> {
   final FlutterTts flutterTts = FlutterTts();
+  bool isFavorite = false;
+
+  void _getFavoriteType() async {
+    Database db = await DatabaseHelper.instance.database;
+    String tableName;
+    if (widget.translateType == Translate.av) {
+      tableName = 'av';
+    } else {
+      tableName = 'va';
+    }
+
+    List<Map> result = await db.rawQuery('''SELECT favorite.id FROM favorite 
+        WHERE favorite.id = ${widget.word.id} 
+        AND favorite.tb = '$tableName' ''');
+
+    if (result.isNotEmpty) {
+      isFavorite = true;
+    } else {
+      isFavorite = false;
+    }
+    setState(() {});
+  }
 
   Future _speak() async {
     if (widget.translateType == Translate.av) {
@@ -37,7 +59,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     IconData iconData;
     Color iconColor;
 
-    if (widget.word.favorite != 0) {
+    if (isFavorite) {
       iconData = Icons.star_rounded;
     } else {
       iconData = Icons.star_border_rounded;
@@ -50,6 +72,12 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     }
 
     return Icon(iconData, color: iconColor);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFavoriteType();
   }
 
   @override
@@ -70,31 +98,28 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             onPressed: () async {
               Database db = await DatabaseHelper.instance.database;
               String tableName;
-              int favoriteNumber;
-              // favorite word in av mark is 1
-              // favorite word in va mark is 2
-              // if not favorite: default value is 0
 
               if (widget.translateType == Translate.av) {
                 tableName = 'av';
-                favoriteNumber = 1;
               } else {
                 tableName = 'va';
-                favoriteNumber = 2;
               }
 
-              if (widget.word.favorite == 0) {
-                // Set this word to favorite
+              if (!isFavorite) {
                 db.rawQuery(
-                    'UPDATE $tableName SET favorite = $favoriteNumber WHERE id = ${widget.word.id}');
-                widget.word.setfavorite = favoriteNumber;
+                    '''INSERT INTO favorite (id, word, tb) VALUES (${widget.word.id}, '${widget.word.word}', '$tableName')''');
               } else {
-                // Set this word to normal, favorite = 0
                 db.rawQuery(
-                    'UPDATE $tableName SET favorite = 0 WHERE id = ${widget.word.id}');
-                widget.word.setfavorite = 0;
+                    'DELETE FROM favorite WHERE id = ${widget.word.id}');
               }
-              setState(() {});
+
+              setState(() {
+                if (isFavorite == false) {
+                  isFavorite = true;
+                } else {
+                  isFavorite = false;
+                }
+              });
             },
           ),
         ),

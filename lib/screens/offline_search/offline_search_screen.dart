@@ -41,7 +41,6 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
         html: result[i]['html'],
         description: result[i]['description'],
         pronounce: result[i]['pronounce'],
-        favorite: result[i]['favorite'],
       ),
     );
     words

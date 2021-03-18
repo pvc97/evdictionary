@@ -76,7 +76,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
         html: result[i]['html'],
         description: result[i]['description'],
         pronounce: result[i]['pronounce'],
-        favorite: result[i]['favorite'],
       ),
     );
 
@@ -125,17 +124,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
           itemCount: items.length,
           itemBuilder: (context, index) {
             return WordCard(
-                items: items,
-                index: index,
-                flagDir: items[index].table == 'av'
-                    ? kEnglishFlagDir
-                    : kVietNamFlagDir,
-                // Because onPressedWordCard is Future function,
-                // I can not pass it in to a Function variable
-                // so wrap it with another Function :)
-                onPressed: () {
-                  _onPressedWordCard(items, index);
-                });
+              items: items,
+              index: index,
+              flagDir: items[index].table == 'av'
+                  ? kEnglishFlagDir
+                  : kVietNamFlagDir,
+              // Because onPressedWordCard is Future function,
+              // I can not pass it in to a Function variable
+              // so wrap it with another Function :)
+              onPressed: () {
+                _onPressedWordCard(items, index);
+              },
+            );
           },
         ),
       ),
