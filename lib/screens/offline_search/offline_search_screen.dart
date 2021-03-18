@@ -36,11 +36,13 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
     List<Word> words = List.generate(
       result.length,
       (i) => Word(
-          id: result[i]['id'],
-          word: result[i]['word'],
-          html: result[i]['html'],
-          description: result[i]['description'],
-          pronounce: result[i]['pronounce']),
+        id: result[i]['id'],
+        word: result[i]['word'],
+        html: result[i]['html'],
+        description: result[i]['description'],
+        pronounce: result[i]['pronounce'],
+        favorite: result[i]['favorite'],
+      ),
     );
     words
         .sort((a, b) => (a.word.toLowerCase()).compareTo(b.word.toLowerCase()));
@@ -240,8 +242,8 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                         translateType == Translate.av
                             ? kEnglishFlagDir
                             : kVietNamFlagDir,
-                        width: 20,
-                        height: 20,
+                        width: 25,
+                        height: 25,
                       ),
                       SizedBox(
                         width: 20.0,

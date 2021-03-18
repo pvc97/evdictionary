@@ -15,8 +15,8 @@ class FlagWidget extends StatelessWidget {
         children: [
           Image.asset(
             'assets/icons/${language.toLowerCase()}.png',
-            width: 25,
-            height: 25,
+            width: 30,
+            height: 30,
           ),
           Text(
             ' $language',

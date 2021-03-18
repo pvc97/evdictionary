@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'custom_button.dart';
+
 class SharedAppBar extends StatelessWidget {
   SharedAppBar({
     @required this.size,
     @required this.title,
     @required this.backgroundColor,
-    @required this.icon,
-    this.onPressed,
+    this.customButton,
   });
 
   final Size size;
   final String title;
   final Color backgroundColor;
-  final Icon icon;
-  final Function onPressed;
+  final CustomButton customButton;
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +33,7 @@ class SharedAppBar extends StatelessWidget {
             right: 10.0,
           ),
           // Using RawMaterialButton because IconButton don't have background color
-          child: RawMaterialButton(
-            child: icon,
-            onPressed: onPressed,
-            elevation: 3.0,
-            constraints: BoxConstraints.tightFor(
-              width: 40.0,
-              height: 40.0,
-            ),
-            shape: CircleBorder(), // Button Tròn
-            fillColor: Colors.white,
-          ),
+          child: customButton,
         ),
       ],
       centerTitle: true,

@@ -24,6 +24,9 @@ class OnlineSearchScreen extends StatelessWidget {
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
+        child: Center(
+          child: Text('Online Search'),
+        ),
       ),
     );
   }
