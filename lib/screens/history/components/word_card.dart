@@ -19,7 +19,7 @@ class WordCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(18.0),
         margin: EdgeInsets.only(bottom: 20.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(

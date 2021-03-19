@@ -43,8 +43,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   void _removeFavorite(Favorite item) async {
     Database db = await DatabaseHelper.instance.database;
+    String tableName = item.table;
 
-    db.rawQuery('DELETE FROM favorite WHERE id = ${item.id}');
+    db.rawQuery(
+        '''DELETE FROM favorite WHERE id = ${item.id} AND tb = '$tableName' ''');
   }
 
   Future _onPressedWordCard(List items, int index) async {
@@ -99,7 +101,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.1),
+        preferredSize: Size.fromHeight(size.height * 0.105),
         child: SharedAppBar(
           size: size,
           title: 'Favorite',
@@ -116,7 +118,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           itemBuilder: (context, index) {
             final item = items[index];
             return Dismissible(
-              key: Key(item.id.toString()),
+              key: Key(item.id.toString() + item.table),
               onDismissed: (direction) {
                 setState(() {
                   items.removeAt(index);

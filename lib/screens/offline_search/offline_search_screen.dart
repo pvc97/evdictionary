@@ -113,7 +113,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                     // stops: [0.3, 0.4, 0.8],
                     colors: [
                       kVietnameseAppbarColor,
-                      Colors.purple,
+                      // Colors.purple,
                       kEnglishAppbarColor,
                     ],
                     begin: translateType == Translate.va

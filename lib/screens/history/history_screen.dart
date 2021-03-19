@@ -43,7 +43,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {});
   }
 
-  void _deleteHistory() async {
+  void _deleteAllHistory() async {
     Database db = await DatabaseHelper.instance.database;
     db.rawQuery('DELETE FROM history');
 
@@ -90,6 +90,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
+  void _removeHistory(History item) async {
+    Database db = await DatabaseHelper.instance.database;
+
+    db.rawQuery('DELETE FROM history WHERE position = ${item.position}');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -102,7 +108,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       // appBar can phai de trong PreferredSize
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.1),
+        // preferredSize and toolbarHeight in AppBar need
+        // to equal to center appbar title in vertical
+        preferredSize: Size.fromHeight(size.height * 0.105),
         child: SharedAppBar(
           size: size,
           title: 'History',
@@ -112,7 +120,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               Icons.cleaning_services_rounded,
               color: Colors.blue,
             ),
-            onPressed: _deleteHistory,
+            onPressed: _deleteAllHistory,
           ),
         ),
       ),
@@ -124,16 +132,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
           physics: BouncingScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (context, index) {
-            return WordCard(
-              items: items,
-              index: index,
-              table: items[index].table,
-              // Because onPressedWordCard is Future function,
-              // I can not pass it in to a Function variable
-              // so wrap it with another Function :)
-              onPressed: () {
-                _onPressedWordCard(items, index);
+            final item = items[index];
+            return Dismissible(
+              key: Key(item.position.toString()),
+              onDismissed: (direction) {
+                setState(() {
+                  items.removeAt(index);
+                });
+                _removeHistory(item);
               },
+              child: WordCard(
+                items: items,
+                index: index,
+                table: items[index].table,
+                // Because onPressedWordCard is Future function,
+                // I can not pass it in to a Function variable
+                // so wrap it with another Function :)
+                onPressed: () {
+                  _onPressedWordCard(items, index);
+                },
+              ),
             );
           },
         ),

@@ -110,7 +110,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                     '''INSERT INTO favorite (id, word, tb) VALUES (${widget.word.id}, '${widget.word.word}', '$tableName')''');
               } else {
                 db.rawQuery(
-                    'DELETE FROM favorite WHERE id = ${widget.word.id}');
+                    '''DELETE FROM favorite WHERE id = ${widget.word.id} AND tb = '$tableName' ''');
               }
 
               setState(() {
