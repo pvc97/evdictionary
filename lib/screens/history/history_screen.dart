@@ -120,15 +120,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
         margin: EdgeInsets.all(20.0),
         // ListView not in Column don't have to wrap by Expaned
         child: ListView.builder(
+          clipBehavior: Clip.none, // Fix shadow weird behavior
           physics: BouncingScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (context, index) {
             return WordCard(
               items: items,
               index: index,
-              flagDir: items[index].table == 'av'
-                  ? kEnglishFlagDir
-                  : kVietNamFlagDir,
+              table: items[index].table,
               // Because onPressedWordCard is Future function,
               // I can not pass it in to a Function variable
               // so wrap it with another Function :)

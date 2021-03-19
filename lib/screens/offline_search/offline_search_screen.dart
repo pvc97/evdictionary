@@ -110,10 +110,10 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
                     bottomRight: Radius.circular(25),
                   ),
                   gradient: LinearGradient(
-                    stops: [0.2, 0.8, 1],
+                    // stops: [0.3, 0.4, 0.8],
                     colors: [
                       kVietnameseAppbarColor,
-                      Colors.lightBlue,
+                      Colors.purple,
                       kEnglishAppbarColor,
                     ],
                     begin: translateType == Translate.va

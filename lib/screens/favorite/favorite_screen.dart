@@ -111,6 +111,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         // ListView not in Column don't have to wrap by Expaned
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
+          clipBehavior: Clip.none, // Fix shadow weird behavior
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];
@@ -125,9 +126,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: WordCard(
                 items: items,
                 index: index,
-                flagDir: items[index].table == 'av'
-                    ? kEnglishFlagDir
-                    : kVietNamFlagDir,
+                table: items[index].table,
                 // Because onPressedWordCard is Future function,
                 // I can not pass it in to a Function variable
                 // so wrap it with another Function :)

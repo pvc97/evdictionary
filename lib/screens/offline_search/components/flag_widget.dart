@@ -8,7 +8,7 @@ class FlagWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 130,
+      width: 135,
       padding: EdgeInsets.all(7),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
