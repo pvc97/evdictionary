@@ -51,3 +51,13 @@ class LoadingScreen extends StatelessWidget {
     );
   }
 }
+
+// return Listener(
+//       // Dismiss key board when press outside textfiel
+//       onPointerDown: (_) {
+//         FocusScopeNode currentFocus = FocusScope.of(context);
+//         if (!currentFocus.hasPrimaryFocus &&
+//             currentFocus.focusedChild != null) {
+//           currentFocus.focusedChild.unfocus();
+//         }
+//       },

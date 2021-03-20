@@ -14,7 +14,11 @@ class FavoriteScreen extends StatefulWidget {
   _FavoriteScreenState createState() => _FavoriteScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _FavoriteScreenState extends State<FavoriteScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   List<Favorite> items = [];
 
   Future<List> _getListFavorite() async {
@@ -93,11 +97,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   void initState() {
     super.initState();
-    _loadFavorite();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    _loadFavorite();
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(

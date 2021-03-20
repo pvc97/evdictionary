@@ -179,6 +179,8 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   Future<Widget> _buildHtml() async {
     if (widget.word.html.length > 2000) {
       await Future.delayed(const Duration(milliseconds: 400));
+    } else if (widget.word.html.length > 1200) {
+      await Future.delayed(const Duration(milliseconds: 300));
     }
 
     return Html(

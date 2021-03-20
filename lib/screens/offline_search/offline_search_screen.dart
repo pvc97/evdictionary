@@ -13,7 +13,11 @@ class OfflineSearchScreen extends StatefulWidget {
   _OfflineSearchScreenState createState() => _OfflineSearchScreenState();
 }
 
-class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
+class _OfflineSearchScreenState extends State<OfflineSearchScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final DatabaseHelper databaseHelper = DatabaseHelper.instance;
 
   Translate translateType = Translate.av;
@@ -94,173 +98,181 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Container(
-          height: size.height * 0.2,
-          child: Stack(
-            children: [
-              Container(
-                height: size.height * 0.2 - 26,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25),
-                  ),
-                  gradient: LinearGradient(
-                    // stops: [0.3, 0.4, 0.8],
-                    colors: [
-                      kVietnameseAppbarColor,
-                      // Colors.purple,
-                      kEnglishAppbarColor,
-                    ],
-                    begin: translateType == Translate.va
-                        ? Alignment.topLeft
-                        : Alignment.bottomRight,
-                    end: translateType == Translate.av
-                        ? Alignment.topLeft
-                        : Alignment.bottomRight,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 20,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FlagWidget(
-                      language: translateType == Translate.va
-                          ? 'Vietnamese'
-                          : 'English',
-                    ),
-                    SwitchButton(
-                      onPressed: changeTranslateType,
-                    ),
-                    FlagWidget(
-                      language: translateType == Translate.av
-                          ? 'Vietnamese'
-                          : 'English',
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: 54,
+    return Material(
+      child: Column(
+        children: [
+          Container(
+            height: size.height * 0.2,
+            child: Stack(
+              children: [
+                Container(
+                  height: size.height * 0.2 - 26,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.withOpacity(0.2), blurRadius: 10),
-                    ],
-                  ),
-                  child: TextField(
-                    style: TextStyle(
-                      fontSize: 22.0,
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
                     ),
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: kPrimaryColor,
-                      ),
+                    gradient: LinearGradient(
+                      // stops: [0.3, 0.4, 0.8],
+                      colors: [
+                        kVietnameseAppbarColor,
+                        // Colors.purple,
+                        kEnglishAppbarColor,
+                      ],
+                      begin: translateType == Translate.va
+                          ? Alignment.topLeft
+                          : Alignment.bottomRight,
+                      end: translateType == Translate.av
+                          ? Alignment.topLeft
+                          : Alignment.bottomRight,
                     ),
-                    textInputAction: TextInputAction.search,
-                    onSubmitted: (value) {
-                      if (items.isNotEmpty) {
-                        _insertToHistory(items.first);
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => DefinitionScreen(
-                              word: items.first,
-                              translateType: translateType,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    onChanged: (value) {
-                      updateListWord(value);
-                    },
                   ),
                 ),
-              )
-            ],
-          ),
-        ),
-        Expanded(
-          // ListView in column need wrap by Expanded
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  _insertToHistory(items[index]);
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => DefinitionScreen(
-                        word: items[index],
-                        translateType: translateType,
-                      ),
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(20.0),
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1.0,
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                    ),
-                  ),
+                Positioned(
+                  top: 20,
+                  left: 0,
+                  right: 0,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        translateType == Translate.av
-                            ? kEnglishFlagDir
-                            : kVietNamFlagDir,
-                        width: 25,
-                        height: 25,
+                      FlagWidget(
+                        language: translateType == Translate.va
+                            ? 'Vietnamese'
+                            : 'English',
                       ),
-                      SizedBox(
-                        width: 20.0,
+                      SwitchButton(
+                        onPressed: changeTranslateType,
                       ),
-                      Text(
-                        '${items[index].word}',
-                        style: TextStyle(
-                          fontSize: 25.0,
+                      FlagWidget(
+                        language: translateType == Translate.av
+                            ? 'Vietnamese'
+                            : 'English',
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: 40.0),
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            blurRadius: 10),
+                      ],
+                    ),
+                    child: TextField(
+                      autofocus: false,
+                      style: TextStyle(
+                        fontSize: 22.0,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: kPrimaryColor,
                         ),
                       ),
-                    ],
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (value) {
+                        FocusScope.of(context).unfocus();
+
+                        if (items.isNotEmpty) {
+                          _insertToHistory(items.first);
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => DefinitionScreen(
+                                word: items.first,
+                                translateType: translateType,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      onChanged: (value) {
+                        updateListWord(value);
+                      },
+                    ),
                   ),
-                ),
-              );
-            },
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            // ListView in column need wrap by Expanded
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    _insertToHistory(items[index]);
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => DefinitionScreen(
+                          word: items[index],
+                          translateType: translateType,
+                        ),
+                      ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Container(
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1.0,
+                          color: Colors.grey.withOpacity(0.2),
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          translateType == Translate.av
+                              ? kEnglishFlagDir
+                              : kVietNamFlagDir,
+                          width: 25,
+                          height: 25,
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          '${items[index].word}',
+                          style: TextStyle(
+                            fontSize: 25.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

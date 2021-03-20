@@ -1,6 +1,7 @@
 import 'package:ev_dictionary/screens/favorite/favorite_screen.dart';
 import 'package:ev_dictionary/screens/offline_search/offline_search_screen.dart';
 import 'package:ev_dictionary/screens/online_search/online_search_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'utilities/constaints.dart';
 import 'screens/offline_search/offline_search_screen.dart';
@@ -14,24 +15,46 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
 
-  List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _widgetOptions = <Widget>[
     OfflineSearchScreen(),
     HistoryScreen(),
     FavoriteScreen(),
     OnlineSearchScreen(),
   ];
 
+  PageController _pageController;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.jumpToPage(_selectedIndex);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _widgetOptions[_selectedIndex],
+        child: PageView(
+          controller: _pageController,
+          //The following parameter is just to prevent
+          //the user from swiping to the next page.
+          physics: NeverScrollableScrollPhysics(),
+          children: _widgetOptions,
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -46,6 +69,7 @@ class _NavigationState extends State<Navigation> {
             ),
           ],
         ),
+        // ClipRRect to make boder of BottomNavigationBar rounded
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20.0),
@@ -96,3 +120,70 @@ class _NavigationState extends State<Navigation> {
     );
   }
 }
+
+// return SafeArea(
+//       child: CupertinoTabScaffold(
+//         tabBar: CupertinoTabBar(
+//           items: const [
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.search),
+//               label: 'Search',
+//               backgroundColor: kBackgroundColor,
+//             ),
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.access_time),
+//               label: 'History',
+//               backgroundColor: kBackgroundColor,
+//             ),
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.star_border_rounded),
+//               label: 'Favorite',
+//               backgroundColor: kBackgroundColor,
+//             ),
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.public),
+//               label: 'Online',
+//               backgroundColor: kBackgroundColor,
+//             ),
+//           ],
+//         ),
+//         tabBuilder: (context, index) {
+//           switch (index) {
+//             case 0:
+//               return CupertinoTabView(builder: (context) {
+//                 return CupertinoPageScaffold(
+//                   child: OfflineSearchScreen(),
+//                 );
+//               });
+//               break;
+//             case 1:
+//               return CupertinoTabView(builder: (context) {
+//                 return CupertinoPageScaffold(
+//                   child: HistoryScreen(),
+//                 );
+//               });
+//               break;
+//             case 2:
+//               return CupertinoTabView(builder: (context) {
+//                 return CupertinoPageScaffold(
+//                   child: FavoriteScreen(),
+//                 );
+//               });
+//               break;
+//             case 3:
+//               return CupertinoTabView(builder: (context) {
+//                 return CupertinoPageScaffold(
+//                   child: OnlineSearchScreen(),
+//                 );
+//               });
+//               break;
+//             default:
+//               return CupertinoTabView(builder: (context) {
+//                 return CupertinoPageScaffold(
+//                   child: OfflineSearchScreen(),
+//                 );
+//               });
+//           }
+//         },
+//       ),
+//     );

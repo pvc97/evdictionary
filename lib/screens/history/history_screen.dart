@@ -15,13 +15,16 @@ class HistoryScreen extends StatefulWidget {
   _HistoryScreenState createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _HistoryScreenState extends State<HistoryScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   List<History> items = [];
 
   Future<List> _getListHistories() async {
     Database db = await DatabaseHelper.instance.database;
 
-    // db.rawQuery('DELETE FROM history');
     List<Map> result =
         await db.rawQuery('SELECT * FROM history ORDER BY position DESC');
 
@@ -99,11 +102,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    _loadHistory();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    _loadHistory();
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       // appBar can phai de trong PreferredSize
