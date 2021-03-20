@@ -129,7 +129,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: kBackgroundColor,
+              color: kBackgroundCardColor,
             ),
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             margin: EdgeInsets.all(20.0),

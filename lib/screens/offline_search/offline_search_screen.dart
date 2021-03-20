@@ -110,16 +110,13 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                 Container(
                   height: size.height * 0.2 - 26,
                   decoration: BoxDecoration(
-                    color: kPrimaryColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25),
                     ),
                     gradient: LinearGradient(
-                      // stops: [0.3, 0.4, 0.8],
                       colors: [
                         kVietnameseAppbarColor,
-                        // Colors.purple,
                         kEnglishAppbarColor,
                       ],
                       begin: translateType == Translate.va
@@ -144,6 +141,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                             : 'English',
                       ),
                       SwitchButton(
+                        color: Colors.white,
                         onPressed: changeTranslateType,
                       ),
                       FlagWidget(

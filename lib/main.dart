@@ -15,10 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'EV DICTIONARY',
       theme: ThemeData(
-        scaffoldBackgroundColor: kBackgroundColor,
+        scaffoldBackgroundColor: Colors.white,
         primaryColor: kPrimaryColor,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -51,13 +50,3 @@ class LoadingScreen extends StatelessWidget {
     );
   }
 }
-
-// return Listener(
-//       // Dismiss key board when press outside textfiel
-//       onPointerDown: (_) {
-//         FocusScopeNode currentFocus = FocusScope.of(context);
-//         if (!currentFocus.hasPrimaryFocus &&
-//             currentFocus.focusedChild != null) {
-//           currentFocus.focusedChild.unfocus();
-//         }
-//       },

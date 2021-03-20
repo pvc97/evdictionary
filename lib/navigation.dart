@@ -80,22 +80,22 @@ class _NavigationState extends State<Navigation> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.search),
                 label: 'Search',
-                backgroundColor: kBackgroundColor,
+                backgroundColor: kBackgroundCardColor,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.access_time),
                 label: 'History',
-                backgroundColor: kBackgroundColor,
+                backgroundColor: kBackgroundCardColor,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.star_border_rounded),
                 label: 'Favorite',
-                backgroundColor: kBackgroundColor,
+                backgroundColor: kBackgroundCardColor,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.public),
                 label: 'Online',
-                backgroundColor: kBackgroundColor,
+                backgroundColor: kBackgroundCardColor,
               ),
             ],
             currentIndex: _selectedIndex,
@@ -120,70 +120,3 @@ class _NavigationState extends State<Navigation> {
     );
   }
 }
-
-// return SafeArea(
-//       child: CupertinoTabScaffold(
-//         tabBar: CupertinoTabBar(
-//           items: const [
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.search),
-//               label: 'Search',
-//               backgroundColor: kBackgroundColor,
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.access_time),
-//               label: 'History',
-//               backgroundColor: kBackgroundColor,
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.star_border_rounded),
-//               label: 'Favorite',
-//               backgroundColor: kBackgroundColor,
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.public),
-//               label: 'Online',
-//               backgroundColor: kBackgroundColor,
-//             ),
-//           ],
-//         ),
-//         tabBuilder: (context, index) {
-//           switch (index) {
-//             case 0:
-//               return CupertinoTabView(builder: (context) {
-//                 return CupertinoPageScaffold(
-//                   child: OfflineSearchScreen(),
-//                 );
-//               });
-//               break;
-//             case 1:
-//               return CupertinoTabView(builder: (context) {
-//                 return CupertinoPageScaffold(
-//                   child: HistoryScreen(),
-//                 );
-//               });
-//               break;
-//             case 2:
-//               return CupertinoTabView(builder: (context) {
-//                 return CupertinoPageScaffold(
-//                   child: FavoriteScreen(),
-//                 );
-//               });
-//               break;
-//             case 3:
-//               return CupertinoTabView(builder: (context) {
-//                 return CupertinoPageScaffold(
-//                   child: OnlineSearchScreen(),
-//                 );
-//               });
-//               break;
-//             default:
-//               return CupertinoTabView(builder: (context) {
-//                 return CupertinoPageScaffold(
-//                   child: OfflineSearchScreen(),
-//                 );
-//               });
-//           }
-//         },
-//       ),
-//     );

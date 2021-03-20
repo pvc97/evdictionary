@@ -36,7 +36,7 @@ class WordCard extends StatelessWidget {
                   : Colors.red.withOpacity(0.4),
               blurRadius: 8,
               spreadRadius: 2,
-              offset: Offset(4, 4),
+              offset: Offset(2, 2),
             ),
           ],
           borderRadius: BorderRadius.circular(24),
@@ -64,37 +64,3 @@ class WordCard extends StatelessWidget {
     );
   }
 }
-
-// return InkWell(
-//       onTap: onPressed,
-//       borderRadius: BorderRadius.circular(20.0),
-//       child: Container(
-//         padding: EdgeInsets.all(20.0),
-//         decoration: BoxDecoration(
-//           border: Border(
-//             bottom: BorderSide(
-//               width: 1.0,
-//               color: Colors.grey.withOpacity(0.2),
-//             ),
-//           ),
-//         ),
-//         child: Row(
-//           children: [
-//             Image.asset(
-//               flagDir,
-//               width: 25,
-//               height: 25,
-//             ),
-//             SizedBox(
-//               width: 20.0,
-//             ),
-//             Text(
-//               '${items[index].word}',
-//               style: TextStyle(
-//                 fontSize: 25.0,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
