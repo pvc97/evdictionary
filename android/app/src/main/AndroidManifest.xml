@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="ev_dictionary"
+        android:label="EV Dictionary"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity

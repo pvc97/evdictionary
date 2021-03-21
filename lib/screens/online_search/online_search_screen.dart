@@ -4,8 +4,8 @@ import 'package:ev_dictionary/screens/definition/components/shared_appbar.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-// import 'package:translator/translator.dart';
 import 'package:http/http.dart' as http;
+// import 'package:translator/translator.dart';
 
 class OnlineSearchScreen extends StatefulWidget {
   @override
@@ -46,32 +46,19 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
       targetLang = 'en';
     }
 
-    String result = '';
-    http.Response response = await http
-        .get(
-            'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=$value')
-        .timeout(
-      Duration(seconds: 3),
-      onTimeout: () {
-        result = 'You\'re offline';
-        return null;
-      },
-    );
+    http.Response response = await http.get(
+        'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=$value');
 
-    if (response != null) {
+    setState(() {
       if (response.statusCode == 200) {
         if (value.length > 0) {
           List temp = response.body.split('\n')[0].split('\"');
 
-          result = temp[1];
+          output = temp[1];
         }
       } else {
-        result = 'Response status error code: ${response.statusCode} :(';
+        output = 'Response status error code: ${response.statusCode} :(';
       }
-    }
-
-    setState(() {
-      output = result;
     });
   }
 

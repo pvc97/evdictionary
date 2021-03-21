@@ -23,7 +23,9 @@ dependencies:
   flutter_tts: ^2.1.0
   # translator: ^0.1.5
   http: ^0.12.2
-
+  flutter_native_splash: ^0.3.2
+  flutter_spinkit: ^4.1.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -42,7 +44,14 @@ flutter:
   assets:
     - assets/icons/english.png
     - assets/icons/vietnamese.png
+    - assets/splash_screen/splash.png
     - assets/database/dict_hh.db
+
+flutter_native_splash:
+  color: '#FFFFFF'
+  image: assets/splash_screen/splash.png
+  android: true
+  ios: true
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

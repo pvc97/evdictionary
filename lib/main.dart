@@ -1,5 +1,6 @@
 import 'package:ev_dictionary/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'utilities/constaints.dart';
 import 'utilities/database_helper.dart';
 
@@ -44,7 +45,10 @@ class LoadingScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: SpinKitFadingCircle(
+            color: Colors.blue,
+            size: 50,
+          ),
         ),
       ),
     );

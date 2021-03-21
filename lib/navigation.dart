@@ -3,7 +3,6 @@ import 'package:ev_dictionary/screens/offline_search/offline_search_screen.dart'
 import 'package:ev_dictionary/screens/online_search/online_search_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'utilities/constaints.dart';
 import 'screens/offline_search/offline_search_screen.dart';
 import 'screens/history/history_screen.dart';
 
@@ -80,22 +79,22 @@ class _NavigationState extends State<Navigation> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.search),
                 label: 'Search',
-                backgroundColor: kBackgroundCardColor,
+                backgroundColor: Colors.white,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.access_time),
                 label: 'History',
-                backgroundColor: kBackgroundCardColor,
+                backgroundColor: Colors.white,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.star_border_rounded),
                 label: 'Favorite',
-                backgroundColor: kBackgroundCardColor,
+                backgroundColor: Colors.white,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.public),
                 label: 'Online',
-                backgroundColor: kBackgroundCardColor,
+                backgroundColor: Colors.white,
               ),
             ],
             currentIndex: _selectedIndex,
