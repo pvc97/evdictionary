@@ -19,8 +19,8 @@ class WordCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.all(18.0),
-        margin: EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.all(18),
+        margin: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: table == 'av'
@@ -48,13 +48,13 @@ class WordCard extends StatelessWidget {
               width: 25,
               height: 25,
             ),
-            SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             Text(
               '${items[index].word}',
-              style: TextStyle(
-                fontSize: 28.0,
+              style: const TextStyle(
+                fontSize: 28,
                 color: Colors.white,
               ),
             ),

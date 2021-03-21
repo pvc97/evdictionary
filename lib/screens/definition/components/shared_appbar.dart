@@ -22,15 +22,15 @@ class SharedAppBar extends StatelessWidget {
       toolbarHeight: size.height * 0.105,
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: 35.0,
+        style: const TextStyle(
+          fontSize: 35,
           fontWeight: FontWeight.bold,
         ),
       ),
       actions: [
         Container(
-          margin: EdgeInsets.only(
-            right: 10.0,
+          margin: const EdgeInsets.only(
+            right: 10,
           ),
           // Using RawMaterialButton because IconButton don't have background color
           child: customButton,
@@ -38,9 +38,9 @@ class SharedAppBar extends StatelessWidget {
       ],
       centerTitle: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(12),
-          bottomRight: Radius.circular(12),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: const Radius.circular(12),
+          bottomRight: const Radius.circular(12),
         ),
       ),
     );

@@ -121,7 +121,7 @@ class _HistoryScreenState extends State<HistoryScreen>
           title: 'History',
           backgroundColor: kEnglishAppbarColor,
           customButton: CustomButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.cleaning_services_rounded,
               color: Colors.blue,
             ),
@@ -130,7 +130,7 @@ class _HistoryScreenState extends State<HistoryScreen>
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(20.0),
+        margin: const EdgeInsets.all(20),
         // ListView not in Column don't have to wrap by Expaned
         child: ListView.builder(
           clipBehavior: Clip.none, // Fix shadow weird behavior

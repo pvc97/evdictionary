@@ -110,9 +110,9 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                 Container(
                   height: size.height * 0.2 - 26,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: const Radius.circular(25),
+                      bottomRight: const Radius.circular(25),
                     ),
                     gradient: LinearGradient(
                       colors: [
@@ -158,7 +158,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                   right: 0,
                   child: Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(horizontal: 40.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 40.0),
                     height: 54,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -171,7 +171,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                     ),
                     child: TextField(
                       autofocus: false,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 22.0,
                       ),
                       decoration: InputDecoration(
@@ -216,7 +216,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
             // ListView in column need wrap by Expanded
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               itemCount: items.length,
               itemBuilder: (context, index) {
                 return InkWell(
@@ -233,13 +233,13 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                       ),
                     );
                   },
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    padding: EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: 1.0,
+                          width: 1,
                           color: Colors.grey.withOpacity(0.2),
                         ),
                       ),
@@ -253,13 +253,13 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                           width: 25,
                           height: 25,
                         ),
-                        SizedBox(
-                          width: 20.0,
+                        const SizedBox(
+                          width: 20,
                         ),
                         Text(
                           '${items[index].word}',
-                          style: TextStyle(
-                            fontSize: 25.0,
+                          style: const TextStyle(
+                            fontSize: 25,
                           ),
                         ),
                       ],

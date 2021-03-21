@@ -58,9 +58,9 @@ class _NavigationState extends State<Navigation> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30),
-            topLeft: Radius.circular(30),
+          borderRadius: const BorderRadius.only(
+            topRight: const Radius.circular(30),
+            topLeft: const Radius.circular(30),
           ),
           boxShadow: [
             BoxShadow(
@@ -71,9 +71,9 @@ class _NavigationState extends State<Navigation> {
         ),
         // ClipRRect to make boder of BottomNavigationBar rounded
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
+          borderRadius: const BorderRadius.only(
+            topLeft: const Radius.circular(20),
+            topRight: const Radius.circular(20),
           ),
           child: BottomNavigationBar(
             items: [
@@ -105,13 +105,13 @@ class _NavigationState extends State<Navigation> {
             unselectedItemColor: Colors.black,
             // reduce the extra padding on top and bottom of the nav bar
             // by set selectedFontSize and unselectedFontSize to 1.0
-            selectedFontSize: 1.0,
-            unselectedFontSize: 1.0,
-            selectedIconTheme: IconThemeData(
-              size: 30.0,
+            selectedFontSize: 1,
+            unselectedFontSize: 1,
+            selectedIconTheme: const IconThemeData(
+              size: 30,
             ),
-            unselectedIconTheme: IconThemeData(
-              size: 20.0,
+            unselectedIconTheme: const IconThemeData(
+              size: 20,
             ),
             onTap: _onItemTapped,
           ),

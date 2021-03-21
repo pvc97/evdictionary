@@ -115,7 +115,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(20.0),
+        margin: const EdgeInsets.all(20),
         // ListView not in Column don't have to wrap by Expaned
         child: ListView.builder(
           physics: BouncingScrollPhysics(),

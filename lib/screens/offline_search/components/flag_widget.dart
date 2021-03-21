@@ -20,7 +20,7 @@ class FlagWidget extends StatelessWidget {
           ),
           Text(
             ' $language',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
             ),

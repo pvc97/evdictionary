@@ -4,7 +4,8 @@ import 'package:ev_dictionary/screens/definition/components/shared_appbar.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:translator/translator.dart';
+// import 'package:translator/translator.dart';
+import 'package:http/http.dart' as http;
 
 class OnlineSearchScreen extends StatefulWidget {
   @override
@@ -13,20 +14,65 @@ class OnlineSearchScreen extends StatefulWidget {
 
 class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
   Translate translateType = Translate.av;
-  String result = '';
+  String output = '';
+  String input;
 
-  final translator = GoogleTranslator();
+  // final translator = GoogleTranslator();
   final FlutterTts flutterTts = FlutterTts();
 
   Future _speak() async {
     if (translateType == Translate.av) {
-      await flutterTts.setLanguage('vi-VN');
-    } else if (translateType == Translate.va) {
       await flutterTts.setLanguage('en-US');
+    } else if (translateType == Translate.va) {
+      await flutterTts.setLanguage('vi-VN');
     }
 
     await flutterTts.setSpeechRate(0.8);
-    await flutterTts.speak(result);
+    await flutterTts.speak(input);
+  }
+
+  void _onSubmitted(String value) async {
+    value = value.trim();
+    input = value;
+
+    String sourceLang;
+    String targetLang;
+
+    if (translateType == Translate.av) {
+      sourceLang = 'en';
+      targetLang = 'vi';
+    } else {
+      sourceLang = 'vi';
+      targetLang = 'en';
+    }
+
+    String result = '';
+    http.Response response = await http
+        .get(
+            'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=$value')
+        .timeout(
+      Duration(seconds: 3),
+      onTimeout: () {
+        result = 'You\'re offline';
+        return null;
+      },
+    );
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        if (value.length > 0) {
+          List temp = response.body.split('\n')[0].split('\"');
+
+          result = temp[1];
+        }
+      } else {
+        result = 'Response status error code: ${response.statusCode} :(';
+      }
+    }
+
+    setState(() {
+      output = result;
+    });
   }
 
   @override
@@ -60,13 +106,13 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
                 autofocus: true,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  border: const OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                   ),
                   // enabledBorder to make set color for border when unfocus
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    borderSide: const BorderSide(color: Colors.blue, width: 2),
                   ),
                   labelText: translateType == Translate.av
                       ? 'English - Vietnamese'
@@ -75,39 +121,54 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
                   fillColor: kBackgroundCardColor,
                   filled: true,
                 ),
-                style: TextStyle(
-                  fontSize: 22.0,
+                style: const TextStyle(
+                  fontSize: 22,
                 ),
-                onChanged: (value) async {
-                  // translator don't work with value start with ' ' or empty
-                  // so I have to check it first
-                  value = value.trim();
-                  if (value.length > 0 && value[0] != ' ') {
-                    String source;
-                    String destination;
-                    if (translateType == Translate.av) {
-                      source = 'en';
-                      destination = 'vi';
-                    } else {
-                      source = 'vi';
-                      destination = 'en';
-                    }
 
-                    var translation = await translator.translate(value,
-                        from: source, to: destination);
-                    setState(() {
-                      // Don't translate word with length == 1
-                      // Because with word with 1 charactor
-                      // the result will be wrong word
-                      // Example (english to vietnamese): h -> hox
-                      if (value.length == 1) {
-                        result = '';
-                      } else {
-                        result = translation.toString();
-                      }
-                    });
-                  }
-                },
+                // Google limit request, so after a few minutes
+                // the translator stop working if use onChanged
+
+                // onChanged: (value) async {
+                //   // translator don't work with value start with ' ' or empty
+                //   // so I have to check it first
+                //   value = value.trim();
+                //   input = value;
+
+                //   if (value.length > 0 && value[0] != ' ') {
+                //     String source;
+                //     String destination;
+                //     if (translateType == Translate.av) {
+                //       source = 'en';
+                //       destination = 'vi';
+                //     } else {
+                //       source = 'vi';
+                //       destination = 'en';
+                //     }
+
+                //     var translation = await translator.translate(value,
+                //         from: source, to: destination);
+
+                //     // Slow down before setState
+                //     await Future.delayed(const Duration(milliseconds: 200));
+
+                //     setState(() {
+                //       // Don't translate word with length == 1
+                //       // Because with word with 1 charactor
+                //       // the result will be wrong word
+                //       // Example (english to vietnamese): h -> hox
+                //       if (value.length == 1) {
+                //         result = '';
+                //       } else {
+                //         result = translation.toString();
+                //       }
+                //     });
+                //   }
+                // },
+
+                // I've try another way using response but google still blocks onChanged function
+                // So this app can only use onSubmitted with limited requests
+                // https://daynhauhoc.com/t/xin-file-json-key-co-chua-google-translate-api/76506/11
+                onSubmitted: _onSubmitted,
               ),
             ),
             SwitchButton(
@@ -131,16 +192,16 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
                   Container(
                     width: double.infinity,
                     height: double.infinity,
-                    padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 35, 20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.blue, width: 2),
                       color: kBackgroundCardColor,
                     ),
                     child: SingleChildScrollView(
                       child: Text(
-                        result,
-                        style: TextStyle(fontSize: 22),
+                        output,
+                        style: const TextStyle(fontSize: 22),
                       ),
                     ),
                   ),
@@ -153,7 +214,7 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
                       },
                       elevation: 1.0,
                       fillColor: Colors.white,
-                      child: Icon(
+                      child: const Icon(
                         Icons.volume_up,
                         size: 20.0,
                       ),

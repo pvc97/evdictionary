@@ -14,10 +14,10 @@ class CustomButton extends StatelessWidget {
     return RawMaterialButton(
       child: icon,
       onPressed: onPressed,
-      elevation: 3.0,
-      constraints: BoxConstraints.tightFor(
-        width: 40.0,
-        height: 40.0,
+      elevation: 3,
+      constraints: const BoxConstraints.tightFor(
+        width: 40,
+        height: 40,
       ),
       shape: CircleBorder(), // Button Tròn
       fillColor: Colors.white,

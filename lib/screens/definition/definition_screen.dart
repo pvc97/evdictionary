@@ -128,11 +128,11 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(20),
               color: kBackgroundCardColor,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            margin: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.all(20),
             child: SingleChildScrollView(
               // Because Html Widget causes lagging when naviagate from
               // search screen with long html input
@@ -156,17 +156,17 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             ),
           ),
           Positioned(
-            top: 25.0,
-            right: 10.0,
+            top: 25,
+            right: 10,
             child: RawMaterialButton(
               onPressed: () {
                 _speak();
               },
-              elevation: 1.0,
+              elevation: 1,
               fillColor: Colors.white,
-              child: Icon(
+              child: const Icon(
                 Icons.volume_up,
-                size: 20.0,
+                size: 20,
               ),
               shape: CircleBorder(),
             ),
