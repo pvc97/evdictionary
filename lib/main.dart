@@ -9,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  Future loadDatabase() {
+  Future _loadDatabase() {
     return DatabaseHelper.instance.database;
   }
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: FutureBuilder(
-        future: loadDatabase(),
+        future: _loadDatabase(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Navigation();

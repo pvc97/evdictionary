@@ -77,23 +77,27 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
       translateType = Translate.av;
     }
 
-    loadInitWords();
+    _loadInitWords();
   }
 
-  Future updateListWord(String value) async {
-    items = await _getListWords(value);
-    setState(() {});
+  void _updateListWord(String value) async {
+    List result = await _getListWords(value);
+    setState(() {
+      items = result;
+    });
   }
 
-  void loadInitWords() async {
-    await updateListWord('');
-    setState(() {});
+  void _loadInitWords() async {
+    List result = await _getListWords('');
+    setState(() {
+      items = result;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    loadInitWords();
+    _loadInitWords();
   }
 
   @override
@@ -204,7 +208,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                         }
                       },
                       onChanged: (value) {
-                        updateListWord(value);
+                        _updateListWord(value);
                       },
                     ),
                   ),

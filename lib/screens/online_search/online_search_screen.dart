@@ -32,9 +32,6 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
   }
 
   void _onSubmitted(String value) async {
-    value = value.trim();
-    input = value;
-
     String sourceLang;
     String targetLang;
 
@@ -156,6 +153,10 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
                 // So this app can only use onSubmitted with limited requests
                 // https://daynhauhoc.com/t/xin-file-json-key-co-chua-google-translate-api/76506/11
                 onSubmitted: _onSubmitted,
+
+                onChanged: (value) {
+                  input = value.trim();
+                },
               ),
             ),
             SwitchButton(

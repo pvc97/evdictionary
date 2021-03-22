@@ -1,4 +1,5 @@
 import 'package:ev_dictionary/utilities/database_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ev_dictionary/utilities/word.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -8,6 +9,33 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'components/custom_button.dart';
 import 'components/shared_appbar.dart';
+
+Html getHtml(String html) {
+  return Html(
+    data: html,
+    style: {
+      'h1': Style(
+        color: Colors.green,
+        fontWeight: FontWeight.bold,
+        margin: EdgeInsets.zero,
+      ),
+      'h3': Style(
+        color: Colors.red,
+      ),
+      'h2': Style(
+        color: Colors.blue[800],
+      ),
+    },
+  );
+}
+
+Future<Html> buildHtml(String value) async {
+  if (value.length > 1200) {
+    await Future.delayed(const Duration(milliseconds: 200));
+  }
+
+  return await compute(getHtml, value);
+}
 
 class DefinitionScreen extends StatefulWidget {
   final Word word;
@@ -20,6 +48,8 @@ class DefinitionScreen extends StatefulWidget {
 }
 
 class _DefinitionScreenState extends State<DefinitionScreen> {
+  // Future<Html> _html;
+
   final FlutterTts flutterTts = FlutterTts();
   bool isFavorite = false;
 
@@ -78,6 +108,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   void initState() {
     super.initState();
     _getFavoriteType();
+    // _html = buildHtml(widget.word.html);
   }
 
   @override
@@ -139,11 +170,12 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
               // So I used FutureBuilder and _buildHtml with some delay to make
               // animation smoother
               child: FutureBuilder(
-                future: _buildHtml(),
+                future: buildHtml(widget.word.html),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return snapshot.data;
                   }
+                  if (snapshot.hasError) print(snapshot.error);
 
                   return Container(
                     height: size.height * 0.8,
@@ -176,28 +208,28 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     );
   }
 
-  Future<Widget> _buildHtml() async {
-    if (widget.word.html.length > 2000) {
-      await Future.delayed(const Duration(milliseconds: 400));
-    } else if (widget.word.html.length > 1200) {
-      await Future.delayed(const Duration(milliseconds: 300));
-    }
+  // Future<Html> _buildHtml() async {
+  //   if (widget.word.html.length > 2000) {
+  //     await Future.delayed(const Duration(milliseconds: 400));
+  //   } else if (widget.word.html.length > 1200) {
+  //     await Future.delayed(const Duration(milliseconds: 350));
+  //   }
 
-    return Html(
-      data: widget.word.html,
-      style: {
-        'h1': Style(
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-          margin: EdgeInsets.zero,
-        ),
-        'h3': Style(
-          color: Colors.red,
-        ),
-        'h2': Style(
-          color: Colors.blue[800],
-        ),
-      },
-    );
-  }
+  //   return Html(
+  //     data: widget.word.html,
+  //     style: {
+  //       'h1': Style(
+  //         color: Colors.green,
+  //         fontWeight: FontWeight.bold,
+  //         margin: EdgeInsets.zero,
+  //       ),
+  //       'h3': Style(
+  //         color: Colors.red,
+  //       ),
+  //       'h2': Style(
+  //         color: Colors.blue[800],
+  //       ),
+  //     },
+  //   );
+  // }
 }
