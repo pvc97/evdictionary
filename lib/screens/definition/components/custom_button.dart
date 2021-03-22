@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
     return RawMaterialButton(
       child: icon,
       onPressed: onPressed,
-      elevation: 3,
+      elevation: 2,
       constraints: const BoxConstraints.tightFor(
         width: 40,
         height: 40,

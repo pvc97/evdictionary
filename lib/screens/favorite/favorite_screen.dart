@@ -107,7 +107,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.105),
+        preferredSize: Size.fromHeight(size.height * 0.1),
         child: SharedAppBar(
           size: size,
           title: 'Favorite',

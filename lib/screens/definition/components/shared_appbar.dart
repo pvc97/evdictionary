@@ -19,7 +19,7 @@ class SharedAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: backgroundColor,
-      toolbarHeight: size.height * 0.105,
+      toolbarHeight: size.height * 0.1,
       title: Text(
         title,
         style: const TextStyle(
@@ -39,8 +39,8 @@ class SharedAppBar extends StatelessWidget {
       centerTitle: true,
       shape: RoundedRectangleBorder(
         borderRadius: const BorderRadius.only(
-          bottomLeft: const Radius.circular(12),
-          bottomRight: const Radius.circular(12),
+          bottomLeft: const Radius.circular(20),
+          bottomRight: const Radius.circular(20),
         ),
       ),
     );

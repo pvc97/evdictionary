@@ -34,8 +34,8 @@ class WordCard extends StatelessWidget {
               color: table == 'av'
                   ? Colors.blue.withOpacity(0.4)
                   : Colors.red.withOpacity(0.4),
-              blurRadius: 8,
-              spreadRadius: 2,
+              blurRadius: 5,
+              spreadRadius: 1,
               offset: Offset(2, 2),
             ),
           ],

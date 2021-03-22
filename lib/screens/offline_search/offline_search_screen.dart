@@ -131,29 +131,29 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                           : Alignment.bottomRight,
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 20,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FlagWidget(
-                        language: translateType == Translate.va
-                            ? 'Vietnamese'
-                            : 'English',
-                      ),
-                      SwitchButton(
-                        color: Colors.white,
-                        onPressed: changeTranslateType,
-                      ),
-                      FlagWidget(
-                        language: translateType == Translate.av
-                            ? 'Vietnamese'
-                            : 'English',
-                      ),
-                    ],
+                  child: Center(
+                    // top: 20,
+                    // left: 0,
+                    // right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FlagWidget(
+                          language: translateType == Translate.va
+                              ? 'Vietnamese'
+                              : 'English',
+                        ),
+                        SwitchButton(
+                          color: Colors.white,
+                          onPressed: changeTranslateType,
+                        ),
+                        FlagWidget(
+                          language: translateType == Translate.av
+                              ? 'Vietnamese'
+                              : 'English',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(

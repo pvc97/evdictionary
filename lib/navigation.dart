@@ -46,14 +46,12 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: PageView(
-          controller: _pageController,
-          //The following parameter is just to prevent
-          //the user from swiping to the next page.
-          physics: NeverScrollableScrollPhysics(),
-          children: _widgetOptions,
-        ),
+      body: PageView(
+        controller: _pageController,
+        //The following parameter is just to prevent
+        //the user from swiping to the next page.
+        physics: NeverScrollableScrollPhysics(),
+        children: _widgetOptions,
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

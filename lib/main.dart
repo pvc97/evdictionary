@@ -15,25 +15,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EV DICTIONARY',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        primaryColor: kPrimaryColor,
-        textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: FutureBuilder(
-        future: _loadDatabase(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Navigation();
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
+    return Listener(
+      // Dismiss key board when press outside textfiel
+      onPointerDown: (_) {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          currentFocus.focusedChild.unfocus();
+        }
+      },
+      child: MaterialApp(
+        title: 'EV DICTIONARY',
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          primaryColor: kPrimaryColor,
+          textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: FutureBuilder(
+          future: _loadDatabase(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Navigation();
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
 
-          return LoadingScreen();
-        },
+            return LoadingScreen();
+          },
+        ),
       ),
     );
   }

@@ -115,14 +115,14 @@ class _HistoryScreenState extends State<HistoryScreen>
       appBar: PreferredSize(
         // preferredSize and toolbarHeight in AppBar need
         // to equal to center appbar title in vertical
-        preferredSize: Size.fromHeight(size.height * 0.105),
+        preferredSize: Size.fromHeight(size.height * 0.1),
         child: SharedAppBar(
           size: size,
           title: 'History',
           backgroundColor: kEnglishAppbarColor,
           customButton: CustomButton(
             icon: const Icon(
-              Icons.cleaning_services_rounded,
+              Icons.delete_sweep_rounded,
               color: Colors.blue,
             ),
             onPressed: _deleteAllHistory,
