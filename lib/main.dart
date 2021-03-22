@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      // Dismiss key board when press outside textfiel
+      // Dismiss key board when press outside textfield
       onPointerDown: (_) {
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus &&

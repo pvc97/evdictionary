@@ -20,6 +20,8 @@ class DefinitionScreen extends StatefulWidget {
 }
 
 class _DefinitionScreenState extends State<DefinitionScreen> {
+  Future<Html> _html;
+
   final FlutterTts flutterTts = FlutterTts();
   bool isFavorite = false;
 
@@ -78,6 +80,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   void initState() {
     super.initState();
     _getFavoriteType();
+    _html = _buildHtml();
   }
 
   @override
@@ -139,10 +142,14 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
               // So I used FutureBuilder and _buildHtml with some delay to make
               // animation smoother
               child: FutureBuilder(
-                future: _buildHtml(),
+                future: _html,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return snapshot.data;
+                  }
+
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
                   }
 
                   return Container(
@@ -176,7 +183,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     );
   }
 
-  Future<Widget> _buildHtml() async {
+  Future<Html> _buildHtml() async {
     if (widget.word.html.length > 2000) {
       await Future.delayed(const Duration(milliseconds: 400));
     } else if (widget.word.html.length > 1200) {
