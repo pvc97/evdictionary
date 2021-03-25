@@ -43,20 +43,32 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
       targetLang = 'en';
     }
 
-    http.Response response = await http.get(
-        'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=$value');
+    http.Response response = await http
+        .get(
+            'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=$value')
+        .timeout(
+      Duration(seconds: 5),
+      onTimeout: () {
+        setState(() {
+          output = 'You\'re offline';
+        });
+        return null;
+      },
+    );
 
-    setState(() {
-      if (response.statusCode == 200) {
-        if (value.length > 0) {
-          List temp = response.body.split('\n')[0].split('\"');
+    if (response != null) {
+      setState(() {
+        if (response.statusCode == 200) {
+          if (value.length > 0) {
+            List temp = response.body.split('\n')[0].split('\"');
 
-          output = temp[1];
+            output = temp[1];
+          }
+        } else {
+          output = 'Response status error code: ${response.statusCode} :(';
         }
-      } else {
-        output = 'Response status error code: ${response.statusCode} :(';
-      }
-    });
+      });
+    }
   }
 
   @override
