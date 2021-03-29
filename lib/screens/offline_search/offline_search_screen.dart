@@ -62,7 +62,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
       tb = 'va';
     }
 
-    // Colum tb khong co primary key nen chen vao thoa mai
+    // Column tb khong co primary key nen chen vao thoa mai
 
     // Khong can chen gia tri vao column position vi no la primary key
     // nen se tu tang len 1 moi khi insert
@@ -70,7 +70,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
         '''INSERT INTO history (id, word, tb) VALUES (${word.id}, '${word.word}', '$tb')''');
   }
 
-  void changeTranslateType() {
+  void _changeTranslateType() {
     if (translateType == Translate.av) {
       translateType = Translate.va;
     } else {
@@ -145,7 +145,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
                         ),
                         SwitchButton(
                           color: Colors.white,
-                          onPressed: changeTranslateType,
+                          onPressed: _changeTranslateType,
                         ),
                         FlagWidget(
                           language: translateType == Translate.av

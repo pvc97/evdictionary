@@ -23,9 +23,9 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   Future<Html> _html;
 
   final FlutterTts flutterTts = FlutterTts();
-  bool isFavorite = false;
+  bool _isFavorite = false;
 
-  void _getFavoriteType() async {
+  void _getFavoriteStatus() async {
     Database db = await DatabaseHelper.instance.database;
     String tableName;
     if (widget.translateType == Translate.av) {
@@ -38,12 +38,13 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
         WHERE favorite.id = ${widget.word.id} 
         AND favorite.tb = '$tableName' ''');
 
-    if (result.isNotEmpty) {
-      isFavorite = true;
-    } else {
-      isFavorite = false;
-    }
-    setState(() {});
+    setState(() {
+      if (result.isNotEmpty) {
+        _isFavorite = true;
+      } else {
+        _isFavorite = false;
+      }
+    });
   }
 
   Future _speak() async {
@@ -57,11 +58,11 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     await flutterTts.speak(widget.word.word);
   }
 
-  Icon getIconType() {
+  Icon _getFavoriteIconType() {
     IconData iconData;
     Color iconColor;
 
-    if (isFavorite) {
+    if (_isFavorite) {
       iconData = Icons.star_rounded;
     } else {
       iconData = Icons.star_border_rounded;
@@ -76,10 +77,62 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     return Icon(iconData, color: iconColor);
   }
 
+  void _onPressedFavoriteButton() async {
+    Database db = await DatabaseHelper.instance.database;
+    String tableName;
+
+    if (widget.translateType == Translate.av) {
+      tableName = 'av';
+    } else {
+      tableName = 'va';
+    }
+
+    if (!_isFavorite) {
+      db.rawQuery(
+          '''INSERT INTO favorite (id, word, tb) VALUES (${widget.word.id}, '${widget.word.word}', '$tableName')''');
+    } else {
+      db.rawQuery(
+          '''DELETE FROM favorite WHERE id = ${widget.word.id} AND tb = '$tableName' ''');
+    }
+
+    setState(() {
+      if (_isFavorite == false) {
+        _isFavorite = true;
+      } else {
+        _isFavorite = false;
+      }
+    });
+  }
+
+  Future<Html> _buildHtml() async {
+    if (widget.word.html.length > 2000) {
+      await Future.delayed(const Duration(milliseconds: 400));
+    } else if (widget.word.html.length > 1200) {
+      await Future.delayed(const Duration(milliseconds: 350));
+    }
+
+    return Html(
+      data: widget.word.html,
+      style: {
+        'h1': Style(
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+          margin: EdgeInsets.zero,
+        ),
+        'h3': Style(
+          color: Colors.red,
+        ),
+        'h2': Style(
+          color: Colors.blue[800],
+        ),
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    _getFavoriteType();
+    _getFavoriteStatus();
     _html = _buildHtml();
   }
 
@@ -97,32 +150,9 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
               ? kEnglishAppbarColor
               : kVietnameseAppbarColor,
           customButton: CustomButton(
-            icon: getIconType(),
-            onPressed: () async {
-              Database db = await DatabaseHelper.instance.database;
-              String tableName;
-
-              if (widget.translateType == Translate.av) {
-                tableName = 'av';
-              } else {
-                tableName = 'va';
-              }
-
-              if (!isFavorite) {
-                db.rawQuery(
-                    '''INSERT INTO favorite (id, word, tb) VALUES (${widget.word.id}, '${widget.word.word}', '$tableName')''');
-              } else {
-                db.rawQuery(
-                    '''DELETE FROM favorite WHERE id = ${widget.word.id} AND tb = '$tableName' ''');
-              }
-
-              setState(() {
-                if (isFavorite == false) {
-                  isFavorite = true;
-                } else {
-                  isFavorite = false;
-                }
-              });
+            icon: _getFavoriteIconType(),
+            onPressed: () {
+              _onPressedFavoriteButton();
             },
           ),
         ),
@@ -180,31 +210,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<Html> _buildHtml() async {
-    if (widget.word.html.length > 2000) {
-      await Future.delayed(const Duration(milliseconds: 400));
-    } else if (widget.word.html.length > 1200) {
-      await Future.delayed(const Duration(milliseconds: 350));
-    }
-
-    return Html(
-      data: widget.word.html,
-      style: {
-        'h1': Style(
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-          margin: EdgeInsets.zero,
-        ),
-        'h3': Style(
-          color: Colors.red,
-        ),
-        'h2': Style(
-          color: Colors.blue[800],
-        ),
-      },
     );
   }
 }

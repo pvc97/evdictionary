@@ -19,7 +19,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   @override
   bool get wantKeepAlive => true;
 
-  List<Favorite> items = [];
+  List<Favorite> favoriteItems = [];
 
   Future<List> _getListFavorite() async {
     Database db = await DatabaseHelper.instance.database;
@@ -41,11 +41,11 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   }
 
   void _loadFavorite() async {
-    items = await _getListFavorite();
+    favoriteItems = await _getListFavorite();
     setState(() {});
   }
 
-  void _removeFavorite(Favorite item) async {
+  void _deleteSelectedFavorite(Favorite item) async {
     Database db = await DatabaseHelper.instance.database;
     String tableName = item.table;
 
@@ -53,7 +53,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
         '''DELETE FROM favorite WHERE id = ${item.id} AND tb = '$tableName' ''');
   }
 
-  Future _onPressedWordCard(List items, int index) async {
+  Future _onPressedFavoriteItem(List items, int index) async {
     Database db = await DatabaseHelper.instance.database;
 
     String tableName;
@@ -120,26 +120,26 @@ class _FavoriteScreenState extends State<FavoriteScreen>
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
           clipBehavior: Clip.none, // Fix shadow weird behavior
-          itemCount: items.length,
+          itemCount: favoriteItems.length,
           itemBuilder: (context, index) {
-            final item = items[index];
+            final item = favoriteItems[index];
             return Dismissible(
               key: Key(item.id.toString() + item.table),
               onDismissed: (direction) {
                 setState(() {
-                  items.removeAt(index);
+                  favoriteItems.removeAt(index);
                 });
-                _removeFavorite(item);
+                _deleteSelectedFavorite(item);
               },
               child: WordCard(
-                items: items,
+                items: favoriteItems,
                 index: index,
-                table: items[index].table,
+                table: favoriteItems[index].table,
                 // Because onPressedWordCard is Future function,
                 // I can not pass it in to a Function variable
                 // so wrap it with another Function :)
                 onPressed: () {
-                  _onPressedWordCard(items, index);
+                  _onPressedFavoriteItem(favoriteItems, index);
                 },
               ),
             );

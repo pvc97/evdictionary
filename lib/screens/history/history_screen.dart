@@ -20,7 +20,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   @override
   bool get wantKeepAlive => true;
 
-  List<History> items = [];
+  List<History> historyItems = [];
 
   Future<List> _getListHistories() async {
     Database db = await DatabaseHelper.instance.database;
@@ -42,8 +42,10 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   void _loadHistory() async {
-    items = await _getListHistories();
-    setState(() {});
+    List<History> itemsLoaded = await _getListHistories();
+    setState(() {
+      historyItems = itemsLoaded;
+    });
   }
 
   void _deleteAllHistory() async {
@@ -51,11 +53,11 @@ class _HistoryScreenState extends State<HistoryScreen>
     db.rawQuery('DELETE FROM history');
 
     setState(() {
-      items.clear();
+      historyItems.clear();
     });
   }
 
-  Future _onPressedWordCard(List items, int index) async {
+  Future<void> _onPressedHistoryItem(List items, int index) async {
     Database db = await DatabaseHelper.instance.database;
 
     String tableName;
@@ -93,7 +95,7 @@ class _HistoryScreenState extends State<HistoryScreen>
     );
   }
 
-  void _removeHistory(History item) async {
+  void _deleteSelectedHistory(History item) async {
     Database db = await DatabaseHelper.instance.database;
 
     db.rawQuery('DELETE FROM history WHERE position = ${item.position}');
@@ -135,26 +137,26 @@ class _HistoryScreenState extends State<HistoryScreen>
         child: ListView.builder(
           clipBehavior: Clip.none, // Fix shadow weird behavior
           physics: BouncingScrollPhysics(),
-          itemCount: items.length,
+          itemCount: historyItems.length,
           itemBuilder: (context, index) {
-            final item = items[index];
+            final item = historyItems[index];
             return Dismissible(
               key: Key(item.position.toString()),
               onDismissed: (direction) {
                 setState(() {
-                  items.removeAt(index);
+                  historyItems.removeAt(index);
                 });
-                _removeHistory(item);
+                _deleteSelectedHistory(item);
               },
               child: WordCard(
-                items: items,
+                items: historyItems,
                 index: index,
-                table: items[index].table,
+                table: historyItems[index].table,
                 // Because onPressedWordCard is Future function,
                 // I can not pass it in to a Function variable
                 // so wrap it with another Function :)
                 onPressed: () {
-                  _onPressedWordCard(items, index);
+                  _onPressedHistoryItem(historyItems, index);
                 },
               ),
             );

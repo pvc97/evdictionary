@@ -12,9 +12,9 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 0;
+  int _selectedScreen = 0;
 
-  final List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _screens = <Widget>[
     OfflineSearchScreen(),
     HistoryScreen(),
     FavoriteScreen(),
@@ -25,21 +25,20 @@ class _NavigationState extends State<Navigation> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
-      _pageController.jumpToPage(_selectedIndex);
+      _selectedScreen = index;
+      _pageController.jumpToPage(_selectedScreen);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _selectedIndex);
+    _pageController = PageController(initialPage: _selectedScreen);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-
     super.dispose();
   }
 
@@ -51,7 +50,7 @@ class _NavigationState extends State<Navigation> {
         //The following parameter is just to prevent
         //the user from swiping to the next page.
         physics: NeverScrollableScrollPhysics(),
-        children: _widgetOptions,
+        children: _screens,
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -95,7 +94,7 @@ class _NavigationState extends State<Navigation> {
                 backgroundColor: Colors.white,
               ),
             ],
-            currentIndex: _selectedIndex,
+            currentIndex: _selectedScreen,
             showSelectedLabels: false,
             showUnselectedLabels: false,
             selectedItemColor: Colors.blue,

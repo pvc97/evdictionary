@@ -20,7 +20,7 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
   // final translator = GoogleTranslator();
   final FlutterTts flutterTts = FlutterTts();
 
-  Future _speak() async {
+  Future<void> _speak() async {
     if (translateType == Translate.av) {
       await flutterTts.setLanguage('en-US');
     } else if (translateType == Translate.va) {
@@ -29,6 +29,16 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
 
     await flutterTts.setSpeechRate(0.8);
     await flutterTts.speak(input);
+  }
+
+  void _changeTranslateType() {
+    setState(() {
+      if (translateType == Translate.av) {
+        translateType = Translate.va;
+      } else {
+        translateType = Translate.av;
+      }
+    });
   }
 
   void _onSubmitted(String value) async {
@@ -83,11 +93,10 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
               child: TextField(
-                autofocus: true,
+                autofocus: false,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(
@@ -161,15 +170,7 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
             ),
             SwitchButton(
               color: Colors.blue,
-              onPressed: () {
-                setState(() {
-                  if (translateType == Translate.av) {
-                    translateType = Translate.va;
-                  } else {
-                    translateType = Translate.av;
-                  }
-                });
-              },
+              onPressed: _changeTranslateType,
             ),
             // Wrap by Flexible remove A RenderFlex overflowed by ...
             // And I can add width: double.infinity, height: double.infinity to
