@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ev_dictionary/utilities/word.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
-import 'package:flutter_html/style.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'components/custom_button.dart';
@@ -105,27 +104,37 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   }
 
   Future<Html> _buildHtml() async {
-    if (widget.word.html.length > 2000) {
+    if (widget.word.html.length > 1800) {
       await Future.delayed(const Duration(milliseconds: 400));
-    } else if (widget.word.html.length > 1200) {
-      await Future.delayed(const Duration(milliseconds: 350));
+    }
+
+    // To decrease delay, add color to html by hand instead of use style of Html widget
+    String html = widget.word.html;
+    StringBuffer temp = StringBuffer();
+
+    for (int i = 0; i < html.length; ++i) {
+      temp.write(html[i]);
+
+      if (i >= 2 && i < html.length - 3) {
+        if (html[i] == '1' && html[i - 1] == 'h' && html[i - 2] != '/') {
+          temp.write('''><span style='color: green;'>''');
+          ++i;
+        } else if (html[i] == '2' && html[i - 1] == 'h' && html[i - 2] != '/') {
+          temp.write('''><span style='color: #1565c0;'>''');
+          ++i;
+        } else if (html[i] == '3' && html[i - 1] == 'h' && html[i - 2] != '/') {
+          temp.write('''><span style='color: red;'>''');
+          ++i;
+        } else if (html[i + 1] == '<' &&
+            html[i + 2] == '/' &&
+            html[i + 3] == 'h') {
+          temp.write('''</span>''');
+        }
+      }
     }
 
     return Html(
-      data: widget.word.html,
-      style: {
-        'h1': Style(
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-          margin: EdgeInsets.zero,
-        ),
-        'h3': Style(
-          color: Colors.red,
-        ),
-        'h2': Style(
-          color: Colors.blue[800],
-        ),
-      },
+      data: temp.toString(),
     );
   }
 
@@ -193,7 +202,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             ),
           ),
           Positioned(
-            top: 25,
+            top: 30,
             right: 10,
             child: RawMaterialButton(
               onPressed: () {
