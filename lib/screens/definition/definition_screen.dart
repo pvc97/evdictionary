@@ -1,9 +1,9 @@
 import 'package:ev_dictionary/utilities/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:ev_dictionary/utilities/word.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:ev_dictionary/utilities/constaints.dart';
-import 'package:flutter_html/style.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'components/custom_button.dart';
@@ -20,7 +20,9 @@ class DefinitionScreen extends StatefulWidget {
 }
 
 class _DefinitionScreenState extends State<DefinitionScreen> {
-  Future<Html> _html;
+  static const platform = const MethodChannel("com.flutter.dev/html");
+
+  Future<String> _html;
 
   final FlutterTts flutterTts = FlutterTts();
   bool _isFavorite = false;
@@ -143,7 +145,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   void initState() {
     super.initState();
     _getFavoriteStatus();
-    _html = _buildHtml();
+    _html = getHtmlAndroid();
   }
 
   @override
@@ -185,7 +187,10 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                 future: _html,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return snapshot.data;
+                    return Padding(
+                      child: Text(snapshot.data),
+                      padding: EdgeInsets.all(20),
+                    );
                   }
 
                   if (snapshot.hasError) {
@@ -221,5 +226,16 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
         ],
       ),
     );
+  }
+
+  Future<String> getHtmlAndroid() async {
+    String value;
+    try {
+      value =
+          await platform.invokeMethod('getHtml', {"text": widget.word.html});
+    } catch (e) {
+      print(e);
+    }
+    return value;
   }
 }
