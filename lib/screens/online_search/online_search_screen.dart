@@ -5,6 +5,7 @@ import 'package:ev_dictionary/utilities/constaints.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io';
 // import 'package:translator/translator.dart';
 
 class OnlineSearchScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
   Translate translateType = Translate.av;
   String output = '';
   String input;
+
+  var _controller = TextEditingController();
 
   // final translator = GoogleTranslator();
   final FlutterTts flutterTts = FlutterTts();
@@ -33,6 +36,12 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
 
   void _changeTranslateType() {
     setState(() {
+      // set all text to default
+      _controller.text = '';
+      input = '';
+      output = '';
+
+      // change type
       if (translateType == Translate.av) {
         translateType = Translate.va;
       } else {
@@ -42,6 +51,17 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
   }
 
   void _onSubmitted(String value) async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        output = 'You\'re offline';
+      });
+      return;
+    }
     String sourceLang;
     String targetLang;
 
@@ -96,6 +116,7 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
           children: [
             Container(
               child: TextField(
+                controller: _controller,
                 autofocus: false,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
@@ -120,43 +141,6 @@ class _OnlineSearchScreenState extends State<OnlineSearchScreen> {
 
                 // Google limit request, so after a few minutes
                 // the translator stop working if use onChanged
-
-                // onChanged: (value) async {
-                //   // translator don't work with value start with ' ' or empty
-                //   // so I have to check it first
-                //   value = value.trim();
-                //   input = value;
-
-                //   if (value.length > 0 && value[0] != ' ') {
-                //     String source;
-                //     String destination;
-                //     if (translateType == Translate.av) {
-                //       source = 'en';
-                //       destination = 'vi';
-                //     } else {
-                //       source = 'vi';
-                //       destination = 'en';
-                //     }
-
-                //     var translation = await translator.translate(value,
-                //         from: source, to: destination);
-
-                //     // Slow down before setState
-                //     await Future.delayed(const Duration(milliseconds: 200));
-
-                //     setState(() {
-                //       // Don't translate word with length == 1
-                //       // Because with word with 1 charactor
-                //       // the result will be wrong word
-                //       // Example (english to vietnamese): h -> hox
-                //       if (value.length == 1) {
-                //         result = '';
-                //       } else {
-                //         result = translation.toString();
-                //       }
-                //     });
-                //   }
-                // },
 
                 // I've try another way using response but google still blocks onChanged function
                 // So this app can only use onSubmitted with limited requests
