@@ -219,6 +219,7 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
           Expanded(
             // ListView in column need wrap by Expanded
             child: ListView.builder(
+              key: ObjectKey(items.hashCode),
               physics: BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 30),
               itemCount: items.length,
