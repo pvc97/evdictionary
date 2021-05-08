@@ -134,34 +134,41 @@ class _HistoryScreenState extends State<HistoryScreen>
       body: Container(
         margin: const EdgeInsets.all(20),
         // ListView not in Column don't have to wrap by Expaned
-        child: ListView.builder(
-          clipBehavior: Clip.none, // Fix shadow weird behavior
-          physics: BouncingScrollPhysics(),
-          itemCount: historyItems.length,
-          itemBuilder: (context, index) {
-            final item = historyItems[index];
-            return Dismissible(
-              key: Key(item.position.toString()),
-              onDismissed: (direction) {
-                setState(() {
-                  historyItems.removeAt(index);
-                });
-                _deleteSelectedHistory(item);
-              },
-              child: WordCard(
-                items: historyItems,
-                index: index,
-                table: historyItems[index].table,
-                // Because onPressedWordCard is Future function,
-                // I can not pass it in to a Function variable
-                // so wrap it with another Function :)
-                onPressed: () {
-                  _onPressedHistoryItem(historyItems, index);
+        child: historyItems.length > 0
+            ? ListView.builder(
+                clipBehavior: Clip.none, // Fix shadow weird behavior
+                physics: BouncingScrollPhysics(),
+                itemCount: historyItems.length,
+                itemBuilder: (context, index) {
+                  final item = historyItems[index];
+                  return Dismissible(
+                    key: Key(item.position.toString()),
+                    onDismissed: (direction) {
+                      setState(() {
+                        historyItems.removeAt(index);
+                      });
+                      _deleteSelectedHistory(item);
+                    },
+                    child: WordCard(
+                      items: historyItems,
+                      index: index,
+                      table: historyItems[index].table,
+                      // Because onPressedWordCard is Future function,
+                      // I can not pass it in to a Function variable
+                      // so wrap it with another Function :)
+                      onPressed: () {
+                        _onPressedHistoryItem(historyItems, index);
+                      },
+                    ),
+                  );
                 },
+              )
+            : Center(
+                child: Text(
+                  'Empty!',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            );
-          },
-        ),
       ),
     );
   }

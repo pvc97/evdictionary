@@ -117,34 +117,41 @@ class _FavoriteScreenState extends State<FavoriteScreen>
       body: Container(
         margin: const EdgeInsets.all(20),
         // ListView not in Column don't have to wrap by Expaned
-        child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          clipBehavior: Clip.none, // Fix shadow weird behavior
-          itemCount: favoriteItems.length,
-          itemBuilder: (context, index) {
-            final item = favoriteItems[index];
-            return Dismissible(
-              key: Key(item.id.toString() + item.table),
-              onDismissed: (direction) {
-                setState(() {
-                  favoriteItems.removeAt(index);
-                });
-                _deleteSelectedFavorite(item);
-              },
-              child: WordCard(
-                items: favoriteItems,
-                index: index,
-                table: favoriteItems[index].table,
-                // Because onPressedWordCard is Future function,
-                // I can not pass it in to a Function variable
-                // so wrap it with another Function :)
-                onPressed: () {
-                  _onPressedFavoriteItem(favoriteItems, index);
+        child: favoriteItems.length > 0
+            ? ListView.builder(
+                physics: BouncingScrollPhysics(),
+                clipBehavior: Clip.none, // Fix shadow weird behavior
+                itemCount: favoriteItems.length,
+                itemBuilder: (context, index) {
+                  final item = favoriteItems[index];
+                  return Dismissible(
+                    key: Key(item.id.toString() + item.table),
+                    onDismissed: (direction) {
+                      setState(() {
+                        favoriteItems.removeAt(index);
+                      });
+                      _deleteSelectedFavorite(item);
+                    },
+                    child: WordCard(
+                      items: favoriteItems,
+                      index: index,
+                      table: favoriteItems[index].table,
+                      // Because onPressedWordCard is Future function,
+                      // I can not pass it in to a Function variable
+                      // so wrap it with another Function :)
+                      onPressed: () {
+                        _onPressedFavoriteItem(favoriteItems, index);
+                      },
+                    ),
+                  );
                 },
+              )
+            : Center(
+                child: Text(
+                  'Empty!',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            );
-          },
-        ),
       ),
     );
   }

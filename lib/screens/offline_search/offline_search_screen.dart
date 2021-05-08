@@ -218,61 +218,68 @@ class _OfflineSearchScreenState extends State<OfflineSearchScreen>
           ),
           Expanded(
             // ListView in column need wrap by Expanded
-            child: ListView.builder(
-              key: ObjectKey(items.hashCode),
-              physics: BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                    _insertToHistory(items[index]);
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => DefinitionScreen(
-                          word: items[index],
-                          translateType: translateType,
-                        ),
-                      ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: Colors.grey.withOpacity(0.2),
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          translateType == Translate.av
-                              ? kEnglishFlagDir
-                              : kVietNamFlagDir,
-                          width: 25,
-                          height: 25,
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          '${items[index].word}',
-                          style: const TextStyle(
-                            fontSize: 25,
+            child: items.length > 0
+                ? ListView.builder(
+                    key: ObjectKey(items.hashCode),
+                    physics: BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                          _insertToHistory(items[index]);
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => DefinitionScreen(
+                                word: items[index],
+                                translateType: translateType,
+                              ),
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 1,
+                                color: Colors.grey.withOpacity(0.2),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                translateType == Translate.av
+                                    ? kEnglishFlagDir
+                                    : kVietNamFlagDir,
+                                width: 25,
+                                height: 25,
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                '${items[index].word}',
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      );
+                    },
+                  )
+                : Center(
+                    child: Text(
+                      'Empty!',
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
