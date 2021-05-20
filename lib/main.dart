@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import 'package:ev_dictionary/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,6 +7,12 @@ import 'utilities/constaints.dart';
 import 'utilities/database_helper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]); // Chỉ cho phép portrait
+
   runApp(MyApp());
 }
 
